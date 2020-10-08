@@ -2,3 +2,5 @@
 quora-api/target/
 quora-db/target/
 quora-service/target/
+quora-api/src/main/resources/application.yaml
+quora-db/src/main/resources/
