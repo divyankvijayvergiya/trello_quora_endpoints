@@ -46,6 +46,7 @@ public class UserDao {
      *
      * @param email: will be searched in database for existing user
      * @return UserEntity object if user with requested email id exists in database
+     * @Author: Vipin P K
      */
     public UserEntity getUserByEmail(final String email) {
         try {
@@ -75,5 +76,18 @@ public class UserDao {
      */
     public void updateUser(final UserEntity updatedUserEntity) {
         entityManager.merge(updatedUserEntity);
+    }
+
+    /**
+     * The method to get the user access token
+     * @param accessToken: will be searched in database for existing user
+     * @Author: Vipin P K
+     */
+    public UserAuthTokenEntity getUserAuthToken(final String accessToken) {
+        try {
+            return entityManager.createNamedQuery("userAuthTokenByAccessToken", UserAuthTokenEntity.class).setParameter("accessToken", accessToken).getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
     }
 }
