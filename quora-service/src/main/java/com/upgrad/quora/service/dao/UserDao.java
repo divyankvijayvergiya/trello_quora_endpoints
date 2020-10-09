@@ -1,5 +1,6 @@
 package com.upgrad.quora.service.dao;
 
+import com.upgrad.quora.service.entity.UserAuthTokenEntity;
 import com.upgrad.quora.service.entity.UserEntity;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +16,7 @@ public class UserDao {
 
     /**
      * The method to create a new user from given UserEntity object
+     *
      * @param userEntity: object from which new user will be created
      * @return UserEntity object
      * @Author: Vipin P K
@@ -26,6 +28,7 @@ public class UserDao {
 
     /**
      * The method to find existing user by user name
+     *
      * @param userName : will be searched in database for existing user
      * @return UserEntity object if user with requested user name exists in database
      * @Author: Vipin P K
@@ -40,6 +43,7 @@ public class UserDao {
 
     /**
      * The method to find existing user by email id
+     *
      * @param email: will be searched in database for existing user
      * @return UserEntity object if user with requested email id exists in database
      */
@@ -49,5 +53,27 @@ public class UserDao {
         } catch (NoResultException nre) {
             return null;
         }
+    }
+
+    /**
+     * The method to create auth token of user
+     *
+     * @param userAuthTokenEntity : create the user authentication token and stored in db
+     * @return usertoken
+     * @Author: Divyank
+     */
+    public UserAuthTokenEntity createAuthToken(final UserAuthTokenEntity userAuthTokenEntity) {
+        entityManager.persist(userAuthTokenEntity);
+        return userAuthTokenEntity;
+    }
+
+    /**
+     * to update user entity
+     *
+     * @param updatedUserEntity : update user entity after creating user auth token
+     * @Author: Divyank
+     */
+    public void updateUser(final UserEntity updatedUserEntity) {
+        entityManager.merge(updatedUserEntity);
     }
 }
