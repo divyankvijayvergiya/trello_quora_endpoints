@@ -1,9 +1,10 @@
 package com.upgrad.quora.service.entity;
 
+import org.apache.commons.lang3.builder.ToStringExclude;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.apache.commons.lang3.builder.*;
 
 @SuppressWarnings("all")
 @Entity
@@ -15,7 +16,8 @@ import org.apache.commons.lang3.builder.*;
 @NamedQueries(
         {
                 @NamedQuery(name = "userByUserName", query = "select u from UserEntity u where u.userName = :userName"),
-                @NamedQuery(name = "userByEmail", query = "select u from UserEntity u where u.email = :email")
+                @NamedQuery(name = "userByEmail", query = "select u from UserEntity u where u.email = :email"),
+                @NamedQuery(name = "userByUserUuid", query = "select u from UserEntity u where u.uuid = :uuid")
         }
 )
 public class UserEntity {
