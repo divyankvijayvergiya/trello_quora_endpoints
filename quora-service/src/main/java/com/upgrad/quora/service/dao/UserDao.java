@@ -80,12 +80,30 @@ public class UserDao {
 
     /**
      * The method to get the user access token
+     *
      * @param accessToken: will be searched in database for existing user
      * @Author: Vipin P K
      */
     public UserAuthTokenEntity getUserAuthToken(final String accessToken) {
         try {
             return entityManager.createNamedQuery("userAuthTokenByAccessToken", UserAuthTokenEntity.class).setParameter("accessToken", accessToken).getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
+    /**
+     * Fetch a single user by given id from the DB.
+     *
+     * @param userUuid Id of the user whose information is to be fetched.
+     * @return User details if exist in the DB else null.
+     */
+    public UserEntity getUserById(final String userUuid) {
+        try {
+            return entityManager
+                    .createNamedQuery("userByUserUuid", UserEntity.class)
+                    .setParameter("uuid", userUuid)
+                    .getSingleResult();
         } catch (NoResultException nre) {
             return null;
         }
