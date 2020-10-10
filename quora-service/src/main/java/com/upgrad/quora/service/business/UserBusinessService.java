@@ -4,6 +4,7 @@ import com.upgrad.quora.service.dao.UserDao;
 import com.upgrad.quora.service.entity.UserAuthTokenEntity;
 import com.upgrad.quora.service.entity.UserEntity;
 import com.upgrad.quora.service.exception.AuthenticationFailedException;
+import com.upgrad.quora.service.exception.SignOutRestrictedException;
 import com.upgrad.quora.service.exception.SignUpRestrictedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -88,6 +89,26 @@ public class UserBusinessService {
         }
     }
 
+    /**
+     * Logs out user if access token is valid, else throw authorization invalid exception.
+     * @Author:Vipin P K
+     * */
 
+    @Transactional(propagation = Propagation.REQUIRED)
+    public UserEntity signout(final String authorizationToken) throws SignOutRestrictedException {
+
+        UserAuthTokenEntity userAuthEntity = userDao.getUserAuthToken(authorizationToken);
+
+        // Validate if user is signed in or not
+        if (userAuthEntity == null) {
+            throw new SignOutRestrictedException("SGR-001", "User is not Signed in");
+        }
+
+        final ZonedDateTime now = ZonedDateTime.now();
+        userAuthEntity.setLogoutAt(now);
+
+        return userAuthEntity.getUser();
+
+    }
 
 }
