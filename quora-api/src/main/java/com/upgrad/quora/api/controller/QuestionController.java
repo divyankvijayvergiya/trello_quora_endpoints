@@ -1,6 +1,5 @@
 package com.upgrad.quora.api.controller;
 
-
 import com.upgrad.quora.api.model.QuestionDetailsResponse;
 import com.upgrad.quora.api.model.QuestionRequest;
 import com.upgrad.quora.api.model.QuestionResponse;
@@ -24,6 +23,9 @@ import java.util.UUID;
 /**
  * Controller to handle user operations related to questions functionality
  * */
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/")
