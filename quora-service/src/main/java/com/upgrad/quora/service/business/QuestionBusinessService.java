@@ -43,7 +43,7 @@ public class QuestionBusinessService {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to post a question");
         }
 
-        questionEntity.setUser(userAuthEntity.getUser());
+        questionEntity.setUserEntity(userAuthEntity.getUser());
         return questionDao.createQuestion(questionEntity);
     }
 
