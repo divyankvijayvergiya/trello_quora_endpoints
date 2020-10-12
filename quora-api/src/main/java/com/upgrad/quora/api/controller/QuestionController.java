@@ -95,4 +95,24 @@ public class QuestionController {
         questionEditResponse.setStatus("QUESTION EDITED");
         return new ResponseEntity<QuestionEditResponse>(questionEditResponse, HttpStatus.OK);
     }
+
+    /**
+     * Delete a question
+     *
+     * @param authorization access token to authenticate user.
+     * @param questionId    id of the question to be edited.
+     * @return Id and status of the question deleted.
+     * @throws AuthorizationFailedException In case the access token is invalid.
+     * @throws InvalidQuestionException     if question with questionId doesn't exist.
+     * @Author:Divyank
+     */
+    @RequestMapping(method = RequestMethod.DELETE, path = "/question/delete/{questionId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<QuestionDeleteResponse> deleteQuestion(@RequestHeader("authorization") final String authorization,
+                                                                 @PathVariable("questionId") final String questionId) throws AuthorizationFailedException, InvalidQuestionException {
+        QuestionEntity questionEntity = questionBusinessService.deleteQuestion(authorization, questionId);
+        QuestionDeleteResponse questionDeleteResponse = new QuestionDeleteResponse();
+        questionDeleteResponse.setId(questionEntity.getUuid());
+        questionDeleteResponse.setStatus("QUESTION DELETED");
+        return new ResponseEntity<QuestionDeleteResponse>(questionDeleteResponse, HttpStatus.OK);
+    }
 }

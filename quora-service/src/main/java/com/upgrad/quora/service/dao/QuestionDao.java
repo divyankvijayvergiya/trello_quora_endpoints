@@ -74,4 +74,15 @@ public class QuestionDao {
         }
 
     }
+
+    /**
+     * Delete the question
+     *
+     * @param questionEntity question entity to be deleted.
+     * @Author: Divyank
+     */
+    public void deleteQuestion(QuestionEntity questionEntity) {
+        entityManager.remove(questionEntity);
+    }
+
 }
