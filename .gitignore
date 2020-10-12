@@ -2,5 +2,11 @@
 quora-api/target/
 quora-db/target/
 quora-service/target/
+<<<<<<< HEAD
+quora-db/quora-db.iml
+quora-api/quora-api.iml
+quora-service/quora-service.iml
+=======
 quora-api/src/main/resources/application.yaml
 quora-db/src/main/resources/
+>>>>>>> develop
