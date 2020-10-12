@@ -13,9 +13,12 @@ import java.time.ZonedDateTime;
 @Table(name = "question")
 @NamedQueries(
         {
-                @NamedQuery(name = "questionEntityById", query = "select q from QuestionEntity q where q.id = :id"),
-                @NamedQuery(name = "questionEntityByUuid", query = "select q from QuestionEntity q where q.uuid = :uuid"),
-                @NamedQuery(name = "questionByUserId", query = "select q from QuestionEntity q inner join q.user usr where usr.uuid = :uuid"),
+                @NamedQuery(
+                        name = "getQuestionById",
+                        query = "select q from QuestionEntity q where q.uuid = :uuid"),
+                @NamedQuery(
+                        name = "getQuestionByUser",
+                        query = "select q from QuestionEntity q where q.userEntity=:user"),
                 @NamedQuery(name = "allQuestions", query = "select q from QuestionEntity q"),
         }
 )
@@ -24,14 +27,14 @@ public class QuestionEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private long id;
 
     @Column(name = "uuid")
     @Size(max = 200)
     @NotNull
     private String uuid;
 
-    @Column(name = "content")
+    @Column(name = "content", columnDefinition = "text")
     @Size(max = 500)
     @NotNull
     private String content;
@@ -46,11 +49,11 @@ public class QuestionEntity {
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
