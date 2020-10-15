@@ -122,7 +122,7 @@ public class QuestionController {
      *
      * @param userId      of the user for whom we want to see the questions asked by him
      * @param accessToken access token to authenticate user.
-     * @return List of QuestionDetailsResponse
+     * @return it returns list of QuestionDetailsResponse
      * @throws AuthorizationFailedException In case the access token is invalid.
      * @throws UserNotFoundException in case user don't have any question
      * @Author:Divyank
