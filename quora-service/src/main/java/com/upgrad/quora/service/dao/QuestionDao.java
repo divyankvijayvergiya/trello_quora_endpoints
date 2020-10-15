@@ -99,4 +99,18 @@ public class QuestionDao {
                 .setParameter("user", userId)
                 .getResultList();
     }
+
+    /**
+     * Method will get the question using the uuid entered by the user and return result
+     * if no results exception will be thrown..
+     * @param uuid  of the question
+     * @Author: Vipin P K
+     * */
+    public QuestionEntity getQuestionByUuid(final String uuid) {
+        try {
+            return entityManager.createNamedQuery("questionEntityByUuid", QuestionEntity.class).setParameter("uuid",uuid).getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
 }
