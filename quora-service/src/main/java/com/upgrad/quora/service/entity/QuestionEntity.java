@@ -1,22 +1,28 @@
 package com.upgrad.quora.service.entity;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.time.ZonedDateTime;
 
+@SuppressWarnings("all")
 @Entity
 @Table(name = "question")
 @NamedQueries(
         {
-                @NamedQuery(name = "questionEntityById", query = "select q from QuestionEntity q where q.id = :id"),
-                @NamedQuery(name = "questionEntityByUuid", query = "select q from QuestionEntity q where q.uuid = :uuid"),
-                @NamedQuery(name = "questionByUserId", query = "select q from QuestionEntity q inner join q.user usr where usr.uuid = :uuid"),
+                @NamedQuery(
+                        name = "getQuestionById",
+                        query = "select q from QuestionEntity q where q.uuid = :uuid"),
+                @NamedQuery(
+                        name = "getQuestionByUser",
+                        query = "select q from QuestionEntity q where q.userEntity=:user"),
                 @NamedQuery(name = "allQuestions", query = "select q from QuestionEntity q"),
         }
 )
-public class QuestionEntity implements Serializable {
+public class QuestionEntity {
 
     @Id
     @Column(name = "id")
@@ -24,22 +30,24 @@ public class QuestionEntity implements Serializable {
     private long id;
 
     @Column(name = "uuid")
-    @NotNull
     @Size(max = 200)
+    @NotNull
     private String uuid;
 
-    @Column(name = "content")
-    @NotNull
+    @Column(name = "content", columnDefinition = "text")
     @Size(max = 500)
+    @NotNull
     private String content;
+
 
     @Column(name = "date")
     @NotNull
     private ZonedDateTime date;
 
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id")
-    private UserEntity user;
+    private UserEntity userEntity;
 
     public long getId() {
         return id;
@@ -73,11 +81,11 @@ public class QuestionEntity implements Serializable {
         this.date = date;
     }
 
-    public UserEntity getUser() {
-        return user;
+    public UserEntity getUserEntity() {
+        return userEntity;
     }
 
-    public void setUser(UserEntity user) {
-        this.user = user;
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 }

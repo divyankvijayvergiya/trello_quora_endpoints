@@ -1,6 +1,7 @@
 package com.upgrad.quora.service.dao;
 
 import com.upgrad.quora.service.entity.QuestionEntity;
+import com.upgrad.quora.service.entity.UserEntity;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -42,4 +43,60 @@ public class QuestionDao {
         }
     }
 
+    /**
+     * Get the question for the given id.
+     *
+     * @param questionId id of the required question.
+     * @return QuestionEntity if question with given id is found else null.
+     * @Author: Divyank
+     */
+    public QuestionEntity getQuestionById(final String questionId) {
+        try {
+            return entityManager
+                    .createNamedQuery("getQuestionById", QuestionEntity.class)
+                    .setParameter("uuid", questionId)
+                    .getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
+    /**
+     * Update the question
+     *
+     * @param questionEntity question entity to be updated.
+     * @Author: Divyank
+     */
+    public void updateQuestion(QuestionEntity questionEntity) {
+        try {
+            entityManager.merge(questionEntity);
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    /**
+     * Delete the question
+     *
+     * @param questionEntity question entity to be deleted.
+     * @Author: Divyank
+     */
+    public void deleteQuestion(QuestionEntity questionEntity) {
+        entityManager.remove(questionEntity);
+    }
+
+    /**
+     * Fetch all the questions from the DB.
+     *
+     * @param userId userId of the user whose list of asked questions has to be retrieved
+     * @return List of QuestionEntity
+     * @Author: Divyank
+     */
+    public List<QuestionEntity> getAllQuestionsByUser(final UserEntity userId) {
+        return entityManager
+                .createNamedQuery("getQuestionByUser", QuestionEntity.class)
+                .setParameter("user", userId)
+                .getResultList();
+    }
 }
