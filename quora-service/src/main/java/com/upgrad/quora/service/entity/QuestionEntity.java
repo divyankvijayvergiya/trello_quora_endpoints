@@ -20,6 +20,11 @@ import java.time.ZonedDateTime;
                         name = "getQuestionByUser",
                         query = "select q from QuestionEntity q where q.userEntity=:user"),
                 @NamedQuery(name = "allQuestions", query = "select q from QuestionEntity q"),
+
+                //@Vipin P K: Added query to get the question using uuid..to implement in createanswer
+                @NamedQuery(name = "questionEntityByUuid",
+                        query = "select qe from QuestionEntity qe where qe.uuid = :uuid"),
+
         }
 )
 public class QuestionEntity {
