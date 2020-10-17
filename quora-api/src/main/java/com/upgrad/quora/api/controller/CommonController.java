@@ -18,8 +18,8 @@ public class CommonController {
     @Autowired
     private CommonService commonService;
 
-    @RequestMapping(method = RequestMethod.GET, path = "/userprofile/{userId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<UserDetailsResponse> userProfile(@PathVariable("userId") final String userUuid, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, UserNotFoundException {
+    @RequestMapping(method = RequestMethod.GET, path = "/userprofile/{userUuid}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<UserDetailsResponse> userProfile(@PathVariable("userUuid") final String userUuid, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, UserNotFoundException {
         final UserEntity userEntity = commonService.getUser(userUuid, authorization);
         UserDetailsResponse userDetailsResponse = new UserDetailsResponse().firstName(userEntity.getFirstName()).lastName(userEntity.getLastName())
                 .userName(userEntity.getUserName()).aboutMe(userEntity.getAboutMe()).contactNumber(userEntity.getContactNumber()).dob(userEntity.getDob())
