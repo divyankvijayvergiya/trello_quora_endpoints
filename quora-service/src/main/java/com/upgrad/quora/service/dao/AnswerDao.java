@@ -51,4 +51,17 @@ public class AnswerDao {
     public void updateAnswer(AnswerEntity answerEntity) {
         entityManager.merge(answerEntity);
     }
+
+
+    /**
+     * Removes the entity from database
+     *
+     * @param answerId uuid of the answer to be deleted
+     * @author Vipin P K
+     */
+    public void performDeleteAnswer(final String answerId) {
+        AnswerEntity answerEntity = getAnswerById(answerId);
+        entityManager.remove(answerEntity);
+    }
+
 }
