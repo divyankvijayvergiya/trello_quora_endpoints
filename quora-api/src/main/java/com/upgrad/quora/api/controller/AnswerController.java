@@ -12,6 +12,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/")
 public class AnswerController {
@@ -45,14 +48,14 @@ public class AnswerController {
     /**
      * This API edits the answer which already exist in the database.
      *
-     * @param authorization       To authenticate the user who is trying to edit the answer.
+     * @param authorization     To authenticate the user who is trying to edit the answer.
      * @param answerId          Id of the answe which is to be edited.
      * @param answerEditRequest Contains the new content of the answer.
      * @return
      * @throws AuthorizationFailedException ATHR-001 If the user has not signed in and ATHR-002 If the
      *                                      user is already signed out and ATHR-003 if the user is not the owner of the answer.
      * @throws AnswerNotFoundException      ANS-001 if the answer is not found in the database.
-     *  @Author:Divyank
+     * @Author:Divyank
      */
     @RequestMapping(
             method = RequestMethod.PUT,
@@ -74,9 +77,9 @@ public class AnswerController {
     /**
      * This API deletes the answer which already exist in the database.
      *
-     * @param authorization     To authenticate the user who is trying to delete the answer.
-     * @param answerId          Id of the answer which is to be deleted
-     *  @Author:Vipin P K
+     * @param authorization To authenticate the user who is trying to delete the answer.
+     * @param answerId      Id of the answer which is to be deleted
+     * @Author:Vipin P K
      */
 
     @RequestMapping(
@@ -93,5 +96,35 @@ public class AnswerController {
         // Return response
         AnswerDeleteResponse answerDeleteResponse = new AnswerDeleteResponse().id(answerId).status("ANSWER DELETED");
         return new ResponseEntity<AnswerDeleteResponse>(answerDeleteResponse, HttpStatus.OK);
+    }
+
+    /**
+     * Get all answers to the question.
+     *
+     * @param questionId    to fetch all the answers for a question.
+     * @param authorization access token to authenticate user.
+     * @return List of AnswerDetailsResponse
+     * @throws AuthorizationFailedException ATHR-001 - if User has not signed in. ATHR-002 if the User
+     *                                      is signed out.
+     * @throws InvalidQuestionException     The question with entered uuid whose details are to be seen
+     *                                      does not exist.
+     * @Author:Divyank
+     */
+    @RequestMapping(
+            method = RequestMethod.GET,
+            path = "/answer/all/{questionId}",
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<List<AnswerDetailsResponse>> getAllAnswersToQuestion(
+            @RequestHeader("authorization") final String authorization,
+            @PathVariable("questionId") String questionId)
+            throws AuthorizationFailedException, InvalidQuestionException {
+        List<AnswerEntity> answers = answerBusinessService.getAllAnswersToQuestion(questionId, authorization);
+        List<AnswerDetailsResponse> answerDetailsResponseList = new ArrayList<>();
+        for (AnswerEntity answerEntity : answers) {
+            AnswerDetailsResponse answerDetailsResponse = new AnswerDetailsResponse().id(answerEntity.getUuid()).questionContent(answerEntity.getQuestionEntity().getContent())
+                    .answerContent(answerEntity.getAnswer());
+            answerDetailsResponseList.add(answerDetailsResponse);
+        }
+        return new ResponseEntity<List<AnswerDetailsResponse>>(answerDetailsResponseList, HttpStatus.OK);
     }
 }
