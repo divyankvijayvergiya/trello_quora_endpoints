@@ -101,5 +101,40 @@ public class AnswerBusinessService {
         return answerEntity;
     }
 
+    /**
+     * deletes the answer which already exist in the database.
+     *
+     * @param authorization To authenticate the user who is trying to edit the answer.
+     * @param answerId Id of the answe which is to be edited.
+     *  @author Vipin P K
+     */
 
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteAnswer(final String answerId, final String authorization) throws AuthorizationFailedException, AnswerNotFoundException {
+        UserAuthTokenEntity userAuthEntity = userDao.getUserAuthToken(authorization);
+
+        // Validate if user is signed in or not
+        if (userAuthEntity == null) {
+            throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
+        }
+
+        // Validate if user has signed out
+        if (userAuthEntity.getLogoutAt() != null) {
+            throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to delete an answer");
+        }
+
+        // Validate if requested answer exist or not
+        if (answerDao.getAnswerById(answerId) == null) {
+            throw new AnswerNotFoundException("ANS-001","Entered answer uuid does not exist");
+        }
+
+        // Validate if current user is the owner of requested answer or the role of user is not non-admin
+        if(!userAuthEntity.getUser().getUuid().equals(answerDao.getAnswerById(answerId).getUserEntity().getUuid())){
+            if (userAuthEntity.getUser().getRole().equals("nonadmin")) {
+                throw new AuthorizationFailedException("ATHR-003", "Only the answer owner or admin can delete the answer");
+            }
+        }
+        //Delete the answer
+        answerDao.performDeleteAnswer(answerId);
+    }
 }
